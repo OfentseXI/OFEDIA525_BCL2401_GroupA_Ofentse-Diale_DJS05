@@ -21,7 +21,7 @@ const tallyReducer = (state = initialState, action) => {
     }
   };
 
-  class Store {
+class Store {
     constructor(reducer, initialState) {
       this.reducer = reducer;
       this.state = initialState;
@@ -44,3 +44,5 @@ const tallyReducer = (state = initialState, action) => {
       };
     }
   }
+
+const store = new Store(tallyReducer, initialState);
