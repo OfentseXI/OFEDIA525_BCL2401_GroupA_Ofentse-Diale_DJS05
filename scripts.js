@@ -5,3 +5,5 @@ const RESET = "RESET";
 const increment = () => ({ type: INCREMENT });
 const decrement = () => ({ type: DECREMENT });
 const reset = () => ({ type: RESET });
+
+const initialState = { count: 0 };
