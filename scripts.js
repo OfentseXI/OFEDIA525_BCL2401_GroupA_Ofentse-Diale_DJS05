@@ -20,3 +20,4 @@ const tallyReducer = (state = initialState, action) => {
         return state;
     }
   };
+
