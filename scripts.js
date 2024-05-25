@@ -1,3 +1,4 @@
+
 // Action types
 
 // Definition of Action Types
@@ -24,7 +25,7 @@ function counter(state = 0, action)
   };
 
 // Initiation of store
-let store = .createStore(counter);
+let store = Redux.createStore(counter);
 
 // Subscribing to state changes
 store.subscribe(() => console.log(store.getState()));
