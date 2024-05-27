@@ -1,37 +1,66 @@
+// Define action types
+const INCREMENT = "INCREMENT";
+const DECREMENT = "DECREMENT";
+const RESET = "RESET";
 
-// Action types
+// Define action creators
+const increment = () => ({ type: INCREMENT });
+const decrement = () => ({ type: DECREMENT });
+const reset = () => ({ type: RESET });
 
-// Definition of Action Types
-{ type: 'INCREMENT' };
-{ type: 'DECREMENT' };
-{ type: 'RESET' };
+// Define the initial state
+const initialState = { count: 0 };
 
-// Definition of the initial state
+// Define the reducer
+const tallyReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case INCREMENT:
+      return { count: state.count + 1 };
+    case DECREMENT:
+      return { count: state.count - 1 };
+    case RESET:
+      return { count: 0 };
+    default:
+      return state;
+  }
+};
 
+// Define the Store class
+class Store {
+  constructor(reducer, initialState) {
+    this.reducer = reducer;
+    this.state = initialState;
+    this.listeners = [];
+  }
 
-// Definition of Reducer
-function counter(state = 0, action)
-{
-    switch (action.type) {
-      case 'INCREMENT':
-        return state + 1;
-      case 'DECREMENT':
-        return state - 1;
-      case 'RESET':
-        return state;
-      default:
-        return state;
-    }
-  };
+  getState() {
+    return this.state;
+  }
 
-// Initiation of store
-let store = Redux.createStore(counter);
+  dispatch(action) {
+    this.state = this.reducer(this.state, action);
+    this.listeners.forEach((listener) => listener());
+  }
 
-// Subscribing to state changes
-store.subscribe(() => console.log(store.getState()));
+  subscribe(listener) {
+    this.listeners.push(listener);
+    return () => {
+      this.listeners = this.listeners.filter((l) => l !== listener);
+    };
+  }
+}
 
-// Dispatching Actions 
-store.dispatch({type: 'INCREMENT'}); // Should log: State: { count: 1 }
-store.dispatch({type: 'INCREMENT'}); // Should log: State: { count: 2 }
-store.dispatch({type: 'DECREMENT'}); // Should log: State: { count: 1 }
-store.dispatch({type: 'RESET'}); // Should log: State: { count: 0 }
+// Instantiate the store
+const store = new Store(tallyReducer, initialState);
+
+// Subscribe to state changes to log the state
+store.subscribe(() => console.log("State:", store.getState()));
+
+// Initial state logging
+console.log("Initial State:", store.getState());
+
+// Dispatching actions to demonstrate state changes
+store.dispatch(increment()); // Should log: State: { count: 1 }
+store.dispatch(increment()); // Should log: State: { count: 2 }
+store.dispatch(decrement()); // Should log: State: { count: 1 }
+store.dispatch(reset()); // Should log: State: { count: 0 }
